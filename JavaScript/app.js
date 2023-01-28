@@ -66,7 +66,7 @@ let app = new Vue({
       });
     });
     // Fetch to retrieve lessons with GET
-    fetch("http://localhost:3000/collections/lessons").then(function (
+    fetch("http://afterschoolapp2-env.eba-wwaj2wgs.eu-west-2.elasticbeanstalk.com/collections/lessons").then(function (
       response
     ) {
       response.json().then(function (json) {
