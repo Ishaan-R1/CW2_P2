@@ -1,4 +1,4 @@
-# CW1_part2-Individual_Task
+# CW2 Part 2
 GitHub Pages:
 https://ishaan-r1.github.io/CW2_P2/
 GitHub Repository:
