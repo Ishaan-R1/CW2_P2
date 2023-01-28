@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Link to external CSS file -->
+    <link rel="stylesheet" href="CSS/style.css" />
+    <!-- Link to vue.js -->
+    <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
+    <!-- Link to js file holding array of objects of data -->
+    <script src="JavaScript/lessons.js"></script>
+
+  <title>After School App</title>
+  </head>
+
+  <body>
+  <div id="App">
+        <div class="topnav">
+          <!-- Creating checkout button to call relevant functions -->
+        <button  
+          v-on:click='displayCheckout();' v-if="canViewCart" id="CartBtn" >
+          <!-- Displaying cart icon on button -->
+          <img src="Images/cart.png" alt="Cart" class="cart">
+          {{ cartItemCount }} 
+          Checkout 
+        </button>
+        <!-- Creating disabled button when no items are added to cart -->
+        <button class="disabled" id="CartBtnDisabled" disabled='disabled' v-else>
+            <img src="Images/cart.png" alt="Cart" class="cart2">
+            Checkout
+        </button>
+        <!-- Display search bar to user to search by subject title or location name -->
+        <input class="searchInput" v-model.trim="searchBar.input2" type="text" id="searchInput" placeholder="Search for lessons...">
+        <button class="searchBtn" v-on:click="testSearch()">Search</button>
+        <!-- <input class="" v-model.trim="searchBar.input2" placeholder="test...">
+        <button class="" v-on:click="testSearch()">Search</button> -->
+        </div>    
+                  
+          <!-- if statement to check if user clicks on checkout button  -->
+    <div v-if='showProduct'>
+        <!-- Display radio buttons to sort by ascending or descending order -->
+        <div class="order">
+            <p>Order:<br></p>
+            <form>
+                <input type="radio" id="a" name="fav_language" value="Ascending" v-on:click="ascend()">
+                <label for="html">Ascending</label><br>
+                <input type="radio" id="d" name="fav_language" value="Descending"v-on:click="descend()">
+                <label for="css">Descending</label><br>
+              </form> 
+          </div>
+        <form>
+          <div class="container2">
+          <div class="sort">
+            <!-- Display radio buttons to enable sort options in ascending order -->
+            <p>Sort By:<br></p>
+            <div v-if="this.sortOrder.order === 'ascend'">
+              <input type="radio" id="subject" name="fav_language" value="Subject" v-model="radioBtn" v-on:click="sort('subject')">
+            <label for="subject">Subject</label><br>
+            <input type="radio" id="subject" name="fav_language" value="Location" v-model="radioBtn" v-on:click="sort('location')">
+            <label for="subject">Location</label><br>
+            <input type="radio" id="subject" name="fav_language" value="Price" v-model="radioBtn" v-on:click="sort('price')">
+            <label for="subject">Price</label><br>
+            <input type="radio" id="subject" name="fav_language" value="Availability" v-model="radioBtn" v-on:click="sort('spaces')">
+            <label for="subject">Availability</label><br>
+            </div>
+            <div v-else>
+            <!-- Display radio buttons to enable sort options in descending order -->
+            <input type="radio" id="subject" name="fav_language" value="Subject" v-model="radioBtn" v-on:click="sort2('subject')">
+            <label for="subject">Subject</label><br>
+            <input type="radio" id="subject" name="fav_language" value="Location" v-model="radioBtn" v-on:click="sort2('location')">
+            <label for="subject">Location</label><br>
+            <input type="radio" id="subject" name="fav_language" value="Price" v-model="radioBtn" v-on:click="sort2('price')">
+            <label for="subject">Price</label><br>
+            <input type="radio" id="subject" name="fav_language" value="Availability" v-model="radioBtn" v-on:click="sort2('spaces')">
+            <label for="subject">Availability</label><br>
+          </div>
+          </div>
+        </div>
+        </form>
+        
+    
+      <div class="container">  
+        <!-- ***** FOR FRONT END SEARCH =  searchFunction -->
+        <div class="subject" v-for="sub in subjects">
+          <!-- Display all of the subjects based on the users search -->
+          <p>Subject: {{ sub.subject }}</p>
+          <p>Location: {{ sub.location }}</p>
+          <p>Price: £{{ sub.price }}</p>
+          <p>Spaces: {{ sub.spaces }}</p>
+          <!-- Display image of each subject -->
+          <img class="img" v-bind:src="sub.image_path"  v-bind:alt="sub.image_text" style="height: 100px">
+          <!-- Display enabled and disabled buttons to user calling relevant functions -->
+          <button class="addtoCartBtn" id="addtoCartBtn" v-on:click="decrementSpaces(); addToCart(sub); btn(sub); updateSpaces(sub.spaces, sub._id); getLessonID(sub._id);" v-if="noMoreSpaces(sub)">
+            Add to cart
+          </button>
+          <button class="addtoCartBtn2 disabled" disabled='disabled' id="addtoCartBtn" v-on:click="decrementSpaces(); addToCart(sub); btn(sub);" v-else>
+            Add to cart
+          </button>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <!-- Display if user clicks on checkout button -->
+        <h1>Shopping Cart</h1>
+        <!-- For loop to display all subjects in cart array -->
+        <div v-for="(product, index) in cart">
+          <div class="subject2">
+            <p>Subject: {{ product.subject }}</p>
+            <p>Location: {{ product.location }}</p>
+            <p>Price: £{{ product.price }}</p>
+            <p>Spaces: {{ product.spaces }}</p>
+  
+          <img class="img" v-bind:src="product.image_path"  v-bind:alt="product.image_text" style="height: 100px">
+          <!-- Button to call function to remove specifc element from the cart array -->
+          <button class="addtoCartBtn" v-on:click="removeLesson(product, index); addBackRemovedLesson(product);">Remove</button>
+          </div>
+        </div>
+        <div class="divider"></div>
+          <p>Fill in all fields</p>
+            <p>First name and last name must include letters only</p>
+            <p>Phone number and last name must include numbers only</p><br>
+            <!-- <form method="post" action="http://localhost:3000/collections/orders"> -->
+            <!-- Creating form to display labels and input fields for full name, address and phone number  -->
+          <p>
+              <strong class="labels">First Name:</strong>
+              <!-- Hold user input of first name in 'order' object -->
+              <input class="field" v-model.trim="order.firstName" name="name"/>
+          </p>
+          <p id="fnameFeedback"></p>
+          <p>
+            <strong class="labels">Last Name:</strong>
+            <!-- Hold user input of last name in 'order' object -->
+            <input class="field" v-model.trim="order.lastName" />
+          </p>
+          <!-- Hold user input of address in 'order' object -->
+          <p><strong class="labels">Address:</strong> <input class="field" v-model.trim="order.address" /></p>
+          <!-- Hold user input of phone number in 'order' object -->
+          <p><strong class="labels">Phone:</strong> <input class="field" v-model.trim="order.phone" name="phone_number"/></p>
+            <!-- Display all the user inputted informtation to the user for confirmation of correct details -->
+            <h1>Order Information</h1>
+            <p>First Name: {{order.firstName}}</p>
+            <p>Last Name: {{order.lastName}}</p>
+            <p>Address: {{order.address}}</p>
+            <p>Phone: {{order.phone}}</p>
+            <button class="cb" v-on:click="checkoutBtn(); postOrder(order.firstName, order.phone, order.id)" v-if="checkForm">Checkout</button>
+            <!-- Disable checkout button if fields not filled correctly -->
+            <button class="cb disabled" disabled='disabled' v-else>
+              Checkout
+            </button>
+            <br><br>
+          <!-- </form> -->
+        <div class="divider"></div>
+            <!-- para to display confirmation message once user checks out correctly -->
+            <p id="confirmCheckout"></p>
+    </div>
+  </div>
+
+    <!-- Link to js file -->
+    <script type="application/javascript" src="JavaScript/app.js"></script>
+  </body>
+</html>
+
