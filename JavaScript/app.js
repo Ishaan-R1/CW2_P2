@@ -45,26 +45,26 @@ let app = new Vue({
     cart: [],
   },
   created: function () {
-    let subject = this.searchBar.input2;
-    fetch("http://localhost:3000/search/lessons/" + "Math").then(function (
-      response
-    ) {
-      response.json().then(function (json) {
-        console.log(json);
-        app.subjects = json;
+    // let subject = this.searchBar.input2;
+    // fetch("http://afterschoolapp2-env.eba-wwaj2wgs.eu-west-2.elasticbeanstalk.com/search/lessons/" + "Math").then(function (
+    //   response
+    // ) {
+    //   response.json().then(function (json) {
+    //     console.log(json);
+    //     app.subjects = json;
 
-        // const result = app.subjects.filter(match => match.subject.includes("a"));
+    //     // const result = app.subjects.filter(match => match.subject.includes("a"));
         
-        // for (let i = 0; i < app.subjects.length; i++) {
-        //   const t = app.subjects[i].subject;
-        // console.log(t);
-        // }
-        // console.log("****8888*****");
-        // console.log(result[0].subject);
-        // console.log("****88888*****");
+    //     // for (let i = 0; i < app.subjects.length; i++) {
+    //     //   const t = app.subjects[i].subject;
+    //     // console.log(t);
+    //     // }
+    //     // console.log("****8888*****");
+    //     // console.log(result[0].subject);
+    //     // console.log("****88888*****");
 
-      });
-    });
+    //   });
+    // });
     // Fetch to retrieve lessons with GET
     fetch("http://afterschoolapp2-env.eba-wwaj2wgs.eu-west-2.elasticbeanstalk.com/collections/lessons").then(function (
       response
@@ -90,7 +90,7 @@ let app = new Vue({
     // Fetch to send search request of subject name to backend
     testSearch() {
       let subject = this.searchBar.input2;
-      fetch("http://localhost:3000/search/lessons/" + subject).then(function (
+      fetch("http://afterschoolapp2-env.eba-wwaj2wgs.eu-west-2.elasticbeanstalk.com/search/lessons/" + subject).then(function (
         response
       ) {
         response.json().then(function (json) {
@@ -110,7 +110,7 @@ let app = new Vue({
         spaces: this.cart.length,
       };
       // Fetch to save new order with POST when submitted
-      fetch("http://localhost:3000/collections/orders", {
+      fetch("http://afterschoolapp2-env.eba-wwaj2wgs.eu-west-2.elasticbeanstalk.com/collections/orders", {
         method: "POST",
         body: JSON.stringify(order),
         headers: {
@@ -125,7 +125,7 @@ let app = new Vue({
     },
     // Fetch to update lesson spaces with PUT
     updateSpaces(spaceNum, id) {
-      fetch("http://localhost:3000/collections/lessons/" + id, {
+      fetch("http://afterschoolapp2-env.eba-wwaj2wgs.eu-west-2.elasticbeanstalk.com/collections/lessons/" + id, {
         // Adding method type
         method: "PUT",
 
