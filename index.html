@@ -32,9 +32,7 @@
         </button>
         <!-- Display search bar to user to search by subject title or location name -->
         <input class="searchInput" v-model.trim="searchBar.input2" type="text" id="searchInput" placeholder="Search for lessons...">
-        <button class="searchBtn" v-on:click="testSearch()">Search</button>
-        <!-- <input class="" v-model.trim="searchBar.input2" placeholder="test...">
-        <button class="" v-on:click="testSearch()">Search</button> -->
+        <button class="searchBtn" v-on:click="searchLessons()">Search</button>
         </div>    
                   
           <!-- if statement to check if user clicks on checkout button  -->
@@ -81,7 +79,7 @@
         
     
       <div class="container">  
-        <!-- ***** FOR FRONT END SEARCH =  searchFunction -->
+        <!-- For front end search =  searchFunction -->
         <div class="subject" v-for="sub in subjects">
           <!-- Display all of the subjects based on the users search -->
           <p>Subject: {{ sub.subject }}</p>
@@ -101,7 +99,7 @@
       </div>
     </div>
     <div v-else>
-      <!-- Display if user clicks on checkout button -->
+      <!-- Displays if user clicks on checkout button -->
         <h1>Shopping Cart</h1>
         <!-- For loop to display all subjects in cart array -->
         <div v-for="(product, index) in cart">
@@ -120,7 +118,6 @@
           <p>Fill in all fields</p>
             <p>First name and last name must include letters only</p>
             <p>Phone number and last name must include numbers only</p><br>
-            <!-- <form method="post" action="http://localhost:3000/collections/orders"> -->
             <!-- Creating form to display labels and input fields for full name, address and phone number  -->
           <p>
               <strong class="labels">First Name:</strong>
