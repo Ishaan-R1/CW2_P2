@@ -55,7 +55,6 @@ let app = new Vue({
         app.subjects = json;
       });
     });
-    setInterval(this.searchLessons, 1000);
   },
   methods: {
     // Fetch to send search request of subject name to backend
