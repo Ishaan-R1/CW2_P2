@@ -45,67 +45,44 @@ let app = new Vue({
     cart: [],
   },
   created: function () {
-    // let subject = this.searchBar.input2;
-    // fetch("https://afterschoolapp2-env.eba-wwaj2wgs.eu-west-2.elasticbeanstalk.com/search/lessons/" + "Math").then(function (
-    //   response
-    // ) {
-    //   response.json().then(function (json) {
-    //     console.log(json);
-    //     app.subjects = json;
-
-    //     // const result = app.subjects.filter(match => match.subject.includes("a"));
-        
-    //     // for (let i = 0; i < app.subjects.length; i++) {
-    //     //   const t = app.subjects[i].subject;
-    //     // console.log(t);
-    //     // }
-    //     // console.log("****8888*****");
-    //     // console.log(result[0].subject);
-    //     // console.log("****88888*****");
-
-    //   });
-    // });
     // Fetch to retrieve lessons with GET
     fetch("https://afterschoolapp2-env.eba-wwaj2wgs.eu-west-2.elasticbeanstalk.com/collections/lessons").then(function (
       response
     ) {
       response.json().then(function (json) {
         console.log(json);
+          // Push JSON data to subjects array when page is loaded
         app.subjects = json;
       });
     });
-
-    // ABOVE COMMENTED CODE IS CORRECT VERSION - BELOW IS TEST
-    //   fetch("https://localhost:3000/search/lessons").then(function (
-    //   response
-    // ) {
-    //   response.json().then(function (json) {
-    //     console.log(json);
-    //     app.subjects = json;
-    //   });
-    // });
   },
-  // TRY PUT IN COMPUTED
   methods: {
     // Fetch to send search request of subject name to backend
-    testSearch() {
+    searchLessons() {
       let subject = this.searchBar.input2;
+      // Get user input of a subject and use fetch to retreive data from URL
       fetch("https://afterschoolapp2-env.eba-wwaj2wgs.eu-west-2.elasticbeanstalk.com/search/lessons/" + subject).then(function (
         response
       ) {
         response.json().then(function (json) {
           console.log(json);
+          // Push JSON data to subjects array which loads on click 
           app.subjects = json;
         });
       });
     },
+    // Function to get the correct order ID to save order data to
     getLessonID(id) {
+      /* Once user clicks on lesson, lesson ID is pushed to order array which is then sent to 
+      'orders' collection via POST in 'lesson_id' field */
       this.orderID.push(id);
     },
+    // Function to POST user first name, number, spaces and lesson IDs 
     postOrder(firstName, phone_number, id) {
       const order = {
         name: firstName,
         phone_number: phone_number,
+        // Lesson IDs and spaces retrieved from array
         lesson_id: this.orderID.toString(),
         spaces: this.cart.length,
       };
@@ -117,32 +94,25 @@ let app = new Vue({
           "Content-type": "application/json",
         },
       })
-        // Converting to JSON
+        // Convert data to JSON
         .then((response) => response.json())
-
-        // Displaying results to console
         .then((json) => console.log(json));
     },
-    // Fetch to update lesson spaces with PUT
+    // Function to execute once user confirms order
     updateSpaces(spaceNum, id) {
+    // Fetch to update lesson spaces with PUT - ID is taken once user clicks on specfic lesson
       fetch("https://afterschoolapp2-env.eba-wwaj2wgs.eu-west-2.elasticbeanstalk.com/collections/lessons/" + id, {
-        // Adding method type
         method: "PUT",
-
-        // Adding body or contents to send
         body: JSON.stringify({
+          // Spaces is decremented by 1 and updated in database
           spaces: spaceNum,
         }),
-
-        // Adding headers to the request
         headers: {
-          "Content-type": "application/json; charset=UTF-8",
+          "Content-type": "application/json",
         },
       })
-        // Converting to JSON
+        // Convert data to JSON
         .then((response) => response.json())
-
-        // Displaying results to console
         .then((json) => console.log(json));
     },
     // Method to decrease number of spaces once user clicks 'Add to Cart' button
@@ -224,18 +194,6 @@ let app = new Vue({
     },
   },
   computed: {
-    // tester: function () {
-    //   fetch("https://localhost:3000/collections/lessons").then(function (
-    //     response
-    //   ) {
-    //     response.json().then(function (json) {
-    //       console.log(json);
-    //       return app.subjects = json;
-    //     });
-    //   });
-    //   return this.subjects;
-    // },
-
     // Computed property to check how many items are added to cart array
     cartItemCount: function () {
       // Displays number of items in cart array or returns empty string if array is empty
