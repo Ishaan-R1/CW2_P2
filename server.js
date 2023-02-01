@@ -1,6 +1,6 @@
 // Requires the relevant modules
-var express = require("express"); 
-var path = require("path"); 
+var express = require("express");
+var path = require("path");
 var morgan = require("morgan");
 const cors = require("cors");
 const { nextTick } = require("process");
@@ -31,13 +31,13 @@ app.use(cors());
 app.use(express.json());
 
 // Get name of collection once provided - either lessons or orders
-app.param("collectionName", function (req, res, next, collectionName) {
-  req.collection = db.collection(collectionName);
+app.param("nameOfCollection", function (req, res, next, nameOfCollection) {
+  req.collection = db.collection(nameOfCollection);
   return next();
 });
 
-// Get all lessons - collectionName specficed in fetch in app.js
-app.get("/collections/:collectionName", function (req, res, next) {
+// Get all lessons - nameOfCollection specified in fetch in app.js
+app.get("/collections/:nameOfCollection", function (req, res, next) {
   // Get all the results from the specified collection
   req.collection.find({}).toArray(function (err, lessonResults) {
     if (err) {
@@ -48,7 +48,7 @@ app.get("/collections/:collectionName", function (req, res, next) {
   });
 });
 // Send new order to DB
-app.post("/collections/:collectionName", function (req, res, next) {
+app.post("/collections/:nameOfCollection", function (req, res, next) {
   // Insert new document in specified collection and then get results
   req.collection.insertOne(req.body, function (err, orderResults) {
     if (err) {
@@ -58,8 +58,8 @@ app.post("/collections/:collectionName", function (req, res, next) {
     res.send(orderResults);
   });
 });
-// Update spaces in lesson collection 
-app.put("/collections/:collectionName/:id", function (req, res, next) {
+// Update spaces in lesson collection
+app.put("/collections/:nameOfCollection/:id", function (req, res, next) {
   // Update element based on provided ID
   req.collection.updateOne(
     { _id: new ObjectId(req.params.id) },
@@ -71,19 +71,19 @@ app.put("/collections/:collectionName/:id", function (req, res, next) {
       } else {
         // Make sure there is only one match to be successful
         res.send(
-          result.matchedCount === 1 ? { msg: "success" } : { msg: "error" }
+          result.matchedCount === 1 ? { msg: "Successfully updated" } : { msg: "Error updating" }
         );
       }
     }
   );
 });
 // Search Functionality - Get route to retrieve user input and return search result from DB
-app.get("/search/:collectionName/:subject", function (req, res, next) {
-  // Create query to check subject mathces a subject stored in lesson collection
-  let query = { subject: { $regex: req.params.subject } };
+app.get("/search/:nameOfCollection/:subject", function (req, res, next) {
+  // Create query to check subject matches a subject stored in lesson collection
+  let searchQuery = { subject: { $regex: req.params.subject } };
   console.log(typeof req.params.subject);
   // Get all the matching results from the specified collection
-  req.collection.find(query).toArray(function (err, results) {
+  req.collection.find(searchQuery).toArray(function (err, results) {
     if (err) {
       return next(err);
     }
@@ -95,11 +95,14 @@ app.get("/search/:collectionName/:subject", function (req, res, next) {
   });
 });
 
-// Middleware to output requests to server 
+// Middleware to output requests to server
 app.use(function (request, response, next) {
   console.log(
-    "Request recieved using " + request.method + " request" +
-      " with URL: " + request.url
+    "Request recieved using " +
+      request.method +
+      " route" +
+      " with URL: " +
+      request.url
   );
   next();
 });
