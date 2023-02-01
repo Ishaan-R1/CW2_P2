@@ -17,6 +17,10 @@ let app = new Vue({
     subjects: [],
     orderID: [],
     search: [],
+    getID: [],
+    getSpaces: [],
+
+
     // Object to hold data of user inputted order details
     order: {
       firstName: "",
@@ -100,22 +104,29 @@ let app = new Vue({
         .then((json) => console.log(json));
     },
     // Function to execute once user confirms order
-    updateSpaces(spaceNum, id) {
-    // Fetch to update lesson spaces with PUT - ID is taken once user clicks on specfic lesson
-      fetch("https://afterschoolapp2-env.eba-wwaj2wgs.eu-west-2.elasticbeanstalk.com/collections/lessons/" + id, {
-        method: "PUT",
-        body: JSON.stringify({
-          // Spaces is decremented by 1 and updated in database
-          spaces: spaceNum,
-        }),
-        headers: {
-          "Content-type": "application/json",
-        },
-      })
-        // Convert data to JSON
-        .then((response) => response.json())
-        .then((json) => console.log(json));
-    },
+    updateSpaces1() {
+      // Fetch to update lesson spaces with PUT - ID is taken once user clicks on specific lesson     
+    for (let i = 0; i < this.cart.length; i++) {      
+        fetch("https://afterschoolapp2-env.eba-wwaj2wgs.eu-west-2.elasticbeanstalk.com/collections/lessons/" + this.getID[i].toString(), {
+          method: "PUT",
+          body: JSON.stringify({
+            // Spaces is decremented by 1 and updated in database
+            spaces: this.getSpaces[i],
+          }),
+          headers: {
+            "Content-type": "application/json",
+          },
+        })
+          // Convert data to JSON
+          .then((response) => response.json())
+          .then((json) => console.log(json));
+      }
+      },
+    updateSpaces2(spacesNum, id) {
+      // Fetch to update lesson spaces with PUT - ID is taken once user clicks on specific lesson   
+        this.getID.push(id);
+        this.getSpaces.push(spacesNum);
+      },
     // Method to decrease number of spaces once user clicks 'Add to Cart' button
     decrementSpaces() {
       if (this.spaces > 0) {
