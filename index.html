@@ -89,7 +89,7 @@
           <!-- Display image of each subject -->
           <img class="img" v-bind:src="sub.image_path"  v-bind:alt="sub.image_text" style="height: 100px">
           <!-- Display enabled and disabled buttons to user calling relevant functions -->
-          <button class="addtoCartBtn" id="addtoCartBtn" v-on:click="decrementSpaces(); addToCart(sub); btn(sub); updateSpaces(sub.spaces, sub._id); getLessonID(sub._id);" v-if="noMoreSpaces(sub)">
+          <button class="addtoCartBtn" id="addtoCartBtn" v-on:click="decrementSpaces(); addToCart(sub); btn(sub); updateSpaces2(sub.spaces, sub._id); getLessonID(sub._id);" v-if="noMoreSpaces(sub)">
             Add to cart
           </button>
           <button class="addtoCartBtn2 disabled" disabled='disabled' id="addtoCartBtn" v-on:click="decrementSpaces(); addToCart(sub); btn(sub);" v-else>
@@ -140,7 +140,7 @@
             <p>Last Name: {{order.lastName}}</p>
             <p>Address: {{order.address}}</p>
             <p>Phone: {{order.phone}}</p>
-            <button class="cb" v-on:click="checkoutBtn(); postOrder(order.firstName, order.phone, order.id)" v-if="checkForm">Checkout</button>
+            <button class="cb" v-on:click="checkoutBtn(); postOrder(order.firstName, order.phone, order.id); updateSpaces1();" v-if="checkForm">Checkout</button>
             <!-- Disable checkout button if fields not filled correctly -->
             <button class="cb disabled" disabled='disabled' v-else>
               Checkout
